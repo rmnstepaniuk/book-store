@@ -1,5 +1,7 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require('express')
+const bodyParser = require('body-parser')
+
+const Books = require('../models/book')
 
 const bookRouter = express.Router();
 
@@ -7,29 +9,69 @@ bookRouter.use(bodyParser.json());
 
 bookRouter.route('/')
     .get((req, res, next) => {
-        res.end("List of all books");
+        Books.find({})
+            .then((promos) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(promos);
+            }, (err) => next(err))
+            .catch((err) => next(err));
     })
     .post((req, res, next) => {
-        res.end('Authentication required\nNot supported');
+        Books.create(req.body)
+            .then((promo) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(promo);
+            }, (err) => next(err))
+            .catch((err) => next(err));
     })
-    .put((req, res, next) => {
-        res.end('Authentication required\nNot supported');
+    .put((req, res) => {
+        res.statusCode = 403;
+        res.end('PUT operation not supported on /books');
     })
     .delete((req, res, next) => {
-        res.end('Authentication required\nDelete all books');
+        Books.remove({})
+            .then((response) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(response);
+            }, (err) => next(err))
+            .catch((err) => next(err));
     });
 bookRouter.route('/:bookID')
     .get((req, res, next) => {
-        res.end('Details about book#' + req.params.bookID);
+        Books.findById(req.params.bookID)
+            .then((promo) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(promo);
+            }, (err) => next(err))
+            .catch((err) => next(err));
     })
     .post((req, res, next) => {
-        res.end('Authentication required\nCreate new book#' + req.params.bookID);
+        res.statusCode = 403;
+        res.end('POST operation not supported on /books/' + req.params.bookID);
     })
     .put((req, res, next) => {
-        res.end('Authentication required\nUpdate the book#' + req.params.bookID);
+        Books.findByIdAndUpdate(req.params.bookID, {
+            $set: req.body
+        }, { new: true })
+            .then((promo) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(promo);
+            }, (err) => next(err))
+            .catch((err) => next(err));
     })
     .delete((req, res, next) => {
-        res.end('Authentication required\nDelete the book#' + req.params.bookID);
+        Books.findByIdAndRemove(req.params.bookID)
+            .then((response) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(response);
+            }, (err) => next(err))
+            .catch((err) => next(err));
     });
 
 module.exports = bookRouter;
