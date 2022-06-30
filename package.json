@@ -1,0 +1,39 @@
+{
+  "name": "book-store",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./bin/server.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node ./bin/server.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
+    "lint": "eslint *.js",
+    "lint:fix": "eslint --fix *.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmnstepaniuk/book-store.git"
+  },
+  "author": "Roman Stepaniuk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rmnstepaniuk/book-store/issues"
+  },
+  "homepage": "https://github.com/rmnstepaniuk/book-store#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cross-env": "^7.0.3",
+    "debug": "^4.3.4",
+    "express": "^4.18.1",
+    "http-errors": "^2.0.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.18.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "nodemon": "^2.0.18"
+  }
+}
