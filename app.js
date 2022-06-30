@@ -1,13 +1,14 @@
 const express = require('express')
 const logger = require('morgan')
 const mongoose = require('mongoose')
+const { createError } = require('http-errors')
 
 const config = require('./bin/config')
 
 const userRouter = require('./routes/users')
 const bookRouter = require('./routes/books')
 
-const connect = mongoose.connect(config.mongoUrl);
+const connect = mongoose.connect(config.mongoUrl)
 
 connect.then((db) => {
   console.log('Connection successful')
