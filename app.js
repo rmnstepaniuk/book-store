@@ -1,6 +1,6 @@
 const express = require('express')
 const logger = require('morgan')
-const mongoose = require('mongoose')
+const { connect } = require('mongoose')
 const { createError } = require('http-errors')
 
 const config = require('./bin/config')
@@ -8,9 +8,9 @@ const config = require('./bin/config')
 const userRouter = require('./routes/users')
 const bookRouter = require('./routes/books')
 
-const connect = mongoose.connect(config.mongoUrl)
+const connection = connect(config.mongoUrl)
 
-connect.then((db) => {
+connection.then((db) => {
   console.log('Connection successful')
 }, (err) => console.log(err))
 
