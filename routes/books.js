@@ -1,7 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const Books = require('../models/book')
+const authenticate = require('../authenticate')
+const Book = require('../models/book')
 
 const bookRouter = express.Router()
 
@@ -9,29 +10,29 @@ bookRouter.use(bodyParser.json())
 
 bookRouter.route('/')
   .get((req, res, next) => {
-    Books.find({})
-      .then((promos) => {
+    Book.find({})
+      .then((books) => {
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
-        res.json(promos)
+        res.json(books)
       }, (err) => next(err))
       .catch((err) => next(err))
   })
-  .post((req, res, next) => {
-    Books.create(req.body)
-      .then((promo) => {
+  .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    Book.create(req.body)
+      .then((book) => {
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
-        res.json(promo)
+        res.json(book)
       }, (err) => next(err))
       .catch((err) => next(err))
   })
-  .put((req, res) => {
+  .put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     res.statusCode = 403
     res.end('PUT operation not supported on /books')
   })
-  .delete((req, res, next) => {
-    Books.remove({})
+  .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    Book.remove({})
       .then((response) => {
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
@@ -39,33 +40,34 @@ bookRouter.route('/')
       }, (err) => next(err))
       .catch((err) => next(err))
   })
+
 bookRouter.route('/:bookID')
   .get((req, res, next) => {
-    Books.findById(req.params.bookID)
-      .then((promo) => {
+    Book.findById(req.params.bookID)
+      .then((book) => {
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
-        res.json(promo)
+        res.json(book)
       }, (err) => next(err))
       .catch((err) => next(err))
   })
-  .post((req, res, next) => {
+  .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     res.statusCode = 403
     res.end('POST operation not supported on /books/' + req.params.bookID)
   })
-  .put((req, res, next) => {
-    Books.findByIdAndUpdate(req.params.bookID, {
+  .put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    Book.findByIdAndUpdate(req.params.bookID, {
       $set: req.body
     }, { new: true })
-      .then((promo) => {
+      .then((book) => {
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
-        res.json(promo)
+        res.json(book)
       }, (err) => next(err))
       .catch((err) => next(err))
   })
-  .delete((req, res, next) => {
-    Books.findByIdAndRemove(req.params.bookID)
+  .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    Book.findByIdAndRemove(req.params.bookID)
       .then((response) => {
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')

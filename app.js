@@ -1,26 +1,41 @@
+const createError = require('http-errors')
 const express = require('express')
+const path = require('path')
 const logger = require('morgan')
-const { connect } = require('mongoose')
-const { createError } = require('http-errors')
+const passport = require('passport')
 
 const config = require('./bin/config')
 
-const userRouter = require('./routes/users')
-const bookRouter = require('./routes/books')
+const usersRouter = require('./routes/users')
+const booksRouter = require('./routes/books')
 
-const connection = connect(config.mongoUrl)
+const mongoose = require('mongoose')
 
-connection.then((db) => {
+const url = config.uri
+const connect = mongoose.connect(url)
+
+connect.then((db) => {
   console.log('Connection successful')
 }, (err) => console.log(err))
 
 const app = express()
 
+// middleware
+app.use(express.static('public'))
+
+// view engine setup
+app.set('view engine', 'ejs')
+
 app.use(logger('dev'))
 app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
-app.use('/users', userRouter)
-app.use('/books', bookRouter)
+app.use(passport.initialize())
+
+app.use('/users', usersRouter)
+app.use('/books', booksRouter)
+
+app.use(express.static(path.join(__dirname, 'public')))
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
