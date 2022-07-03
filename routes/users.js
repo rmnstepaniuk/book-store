@@ -1,59 +1,94 @@
-const express = require('express')
-const router = express.Router()
-
+const { Router } = require('express')
 const bodyParser = require('body-parser')
+const jwt = require('jsonwebtoken')
+const { secretKey } = require('../bin/config')
+
+// handle errors
+const handleErrors = (err) => {
+  const errors = { username: '', password: '' }
+
+  // duplicate error code
+  if (err.code === 11000) {
+    errors.username = 'Username is already registered'
+    return errors
+  }
+
+  // validation errors
+  if (err.message.includes('user validation failed')) {
+    Object.values(err.errors).forEach(({ properties }) => {
+      errors[properties.path] = properties.message
+    })
+  }
+  return errors
+}
+
+const maxAge = 3 * 24 * 60 * 60
+
+// create JWT
+const createToken = (id) => {
+  return jwt.sign({ id }, secretKey, {
+    expiresIn: maxAge
+  })
+}
+
+const router = Router()
+
 const User = require('../models/user')
-const authenticate = require('../authenticate')
-const passport = require('passport')
+// const authenticate = require('../authenticate')
+// const passport = require('passport')
 
 router.use(bodyParser.json())
 
+router.route('/')
 /* GET users listing. */
-router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-  User.find({}, (err, users) => {
-    if (err) {
-      res.statusCode = 500
-      res.setHeader('Content-Type', 'application/json')
-      res.json({ err })
-    } else {
-      res.json(users)
-    }
-  })
-})
-
-router.post('/signup', (req, res, next) => {
-  User.register(new User({ username: req.body.username }),
-    req.body.password, (err, user) => {
+  .get((req, res, next) => {
+    User.find({}, (err, users) => {
       if (err) {
         res.statusCode = 500
         res.setHeader('Content-Type', 'application/json')
         res.json({ err })
       } else {
-        if (req.body.firstname) { user.firstname = req.body.firstname }
-        if (req.body.lastname) { user.lastname = req.body.lastname }
-        user.save((err, user) => {
-          if (err) {
-            res.statusCode = 500
-            res.setHeader('Content-Type', 'application/json')
-            res.json({ err })
-            return
-          }
-          passport.authenticate('local')(req, res, () => {
-            res.statusCode = 200
-            res.setHeader('Content-Type', 'application/json')
-            res.json({ success: true, status: 'Registration Successful!' })
-          })
-        })
+        res.json(users)
       }
     })
-})
+  })
+/* DELETE all users. */
+  .delete((req, res, next) => {
+    User.remove({})
+      .then((response) => {
+        res.statusCode = 200
+        res.setHeader('Content-Type', 'application/json')
+        res.json(response)
+      }, (err) => next(err))
+      .catch((err) => next(err))
+  })
 
-router.post('/login', passport.authenticate('local'), (req, res) => {
-  const token = authenticate.getToken({ _id: req.user._id })
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'application/json')
-  res.json({ success: true, token, status: 'Logged in' })
-})
+router.route('/signup')
+  .get((req, res) => { res.render('signup') })
+  .post(async (req, res, next) => {
+    const { username, name, password } = req.body
+    try {
+      const user = await User.create({ username, name, password })
+      const token = createToken(user._id)
+      res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
+      res.status(201).json({ user: user._id })
+    } catch (err) {
+      const errors = handleErrors(err)
+      res.status(400).json({ errors })
+    }
+  })
+
+router.route('/login')
+  .get((req, res) => { res.render('login') })
+  .post(async (req, res) => {
+    const { username, password } = req.body
+    try {
+      const user = await User.login(username, password)
+      res.status(200).json({ user: user._id })
+    } catch (err) {
+      res.status(400).json({})
+    }
+  })
 
 router.get('/logout', (req, res, next) => {
   if (req.session) {
