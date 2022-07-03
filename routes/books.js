@@ -1,15 +1,15 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
-// const authenticate = require('../authenticate')
 const Book = require('../models/book')
+const { requireAuth } = require('../middleware/authenticate')
 
 const bookRouter = express.Router()
 
 bookRouter.use(bodyParser.json())
 
 bookRouter.route('/')
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     // Book.find({})
     //   .then((books) => {
     //     res.statusCode = 200
@@ -19,7 +19,7 @@ bookRouter.route('/')
     //   .catch((err) => next(err))
     res.render('books')
   })
-  .post((req, res, next) => {
+  .post(requireAuth, (req, res, next) => {
     Book.create(req.body)
       .then((book) => {
         res.statusCode = 200
@@ -28,11 +28,11 @@ bookRouter.route('/')
       }, (err) => next(err))
       .catch((err) => next(err))
   })
-  .put((req, res, next) => {
+  .put(requireAuth, (req, res, next) => {
     res.statusCode = 403
     res.end('PUT operation not supported on /books')
   })
-  .delete((req, res, next) => {
+  .delete(requireAuth, (req, res, next) => {
     Book.remove({})
       .then((response) => {
         res.statusCode = 200
@@ -43,7 +43,7 @@ bookRouter.route('/')
   })
 
 bookRouter.route('/:bookID')
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     Book.findById(req.params.bookID)
       .then((book) => {
         res.statusCode = 200
@@ -52,11 +52,11 @@ bookRouter.route('/:bookID')
       }, (err) => next(err))
       .catch((err) => next(err))
   })
-  .post((req, res, next) => {
+  .post(requireAuth, (req, res, next) => {
     res.statusCode = 403
     res.end('POST operation not supported on /books/' + req.params.bookID)
   })
-  .put((req, res, next) => {
+  .put(requireAuth, (req, res, next) => {
     Book.findByIdAndUpdate(req.params.bookID, {
       $set: req.body
     }, { new: true })
@@ -67,7 +67,7 @@ bookRouter.route('/:bookID')
       }, (err) => next(err))
       .catch((err) => next(err))
   })
-  .delete((req, res, next) => {
+  .delete(requireAuth, (req, res, next) => {
     Book.findByIdAndRemove(req.params.bookID)
       .then((response) => {
         res.statusCode = 200

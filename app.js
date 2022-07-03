@@ -10,6 +10,7 @@ const config = require('./bin/config')
 
 const usersRouter = require('./routes/users')
 const booksRouter = require('./routes/books')
+const { requireAuth } = require('./middleware/authenticate')
 
 const url = config.uri
 const connect = mongoose.connect(url)
@@ -33,6 +34,7 @@ app.set('view engine', 'ejs')
 
 // routes
 app.get('/', (req, res) => { res.render('home') })
+// app.get('/books', requireAuth, (req, res) => { res.render('books') })
 app.use('/users', usersRouter)
 app.use('/books', booksRouter)
 
