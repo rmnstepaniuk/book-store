@@ -32,3 +32,5 @@ node_modules
 ## Plugin-specific files:
 
 # IntelliJ
+
+bin/config.js

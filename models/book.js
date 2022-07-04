@@ -1,8 +1,8 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-require('mongoose-currency').loadType(mongoose)
-const Currency = mongoose.Types.Currency
+require("mongoose-currency").loadType(mongoose);
+const Currency = mongoose.Types.Currency;
 
 const bookSchema = new Schema(
   {
@@ -32,8 +32,8 @@ const bookSchema = new Schema(
   {
     timestamps: true,
   }
-)
+);
 
-const Book = mongoose.model('book', bookSchema)
+const Book = mongoose.model("book", bookSchema);
 
-module.exports = Book
+module.exports = Book;

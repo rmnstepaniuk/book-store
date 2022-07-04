@@ -7,12 +7,11 @@
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
     "lint": "prettier --check .",
-    "format": "prettier --write .",
-    "lint:fix": "eslint --fix *.js"
+    "format": "prettier --write ."
   },
   "husky": {
     "hooks": {
-      "pre-commit": ""
+      "pre-commit": "npm run lint && git add -A ."
     }
   },
   "repository": {
