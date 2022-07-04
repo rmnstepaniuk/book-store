@@ -1,55 +1,70 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const Book = require('../models/book')
+const Books = require('../models/book')
 const { requireAuth } = require('../middleware/authenticate')
+// const { dbFindBooks } = require('../middleware/dbFind')
 
 const bookRouter = express.Router()
 
 bookRouter.use(bodyParser.json())
 
-bookRouter.route('/')
-  .get(requireAuth, (req, res, next) => {
-    // Book.find({})
-    //   .then((books) => {
-    //     res.statusCode = 200
-    //     res.setHeader('Content-Type', 'application/json')
-    //     res.json(books)
-    //   }, (err) => next(err))
-    //   .catch((err) => next(err))
-    res.render('books')
+bookRouter
+  .route('/')
+  .get((req, res, next) => {
+    Books.find({})
+      .populate('comments.author')
+      .then(
+        (dishes) => {
+          res.statusCode = 200
+          res.setHeader('Content-Type', 'application/json')
+          res.json(dishes)
+        },
+        (err) => next(err)
+      )
+      .catch((err) => next(err))
   })
   .post(requireAuth, (req, res, next) => {
-    Book.create(req.body)
-      .then((book) => {
-        res.statusCode = 200
-        res.setHeader('Content-Type', 'application/json')
-        res.json(book)
-      }, (err) => next(err))
+    Books.create(req.body)
+      .then(
+        (dish) => {
+          res.statusCode = 200
+          res.setHeader('Content-Type', 'application/json')
+          res.json(dish)
+        },
+        (err) => next(err)
+      )
       .catch((err) => next(err))
   })
   .put(requireAuth, (req, res, next) => {
     res.statusCode = 403
-    res.end('PUT operation not supported on /books')
+    res.end('PUT operation not supported on /dishes')
   })
   .delete(requireAuth, (req, res, next) => {
-    Book.remove({})
-      .then((response) => {
-        res.statusCode = 200
-        res.setHeader('Content-Type', 'application/json')
-        res.json(response)
-      }, (err) => next(err))
+    Books.remove({})
+      .then(
+        (response) => {
+          res.statusCode = 200
+          res.setHeader('Content-Type', 'application/json')
+          res.json(response)
+        },
+        (err) => next(err)
+      )
       .catch((err) => next(err))
   })
 
-bookRouter.route('/:bookID')
+bookRouter
+  .route('/:bookID')
   .get(requireAuth, (req, res, next) => {
-    Book.findById(req.params.bookID)
-      .then((book) => {
-        res.statusCode = 200
-        res.setHeader('Content-Type', 'application/json')
-        res.json(book)
-      }, (err) => next(err))
+    Books.findById(req.params.bookID)
+      .then(
+        (book) => {
+          res.statusCode = 200
+          res.setHeader('Content-Type', 'application/json')
+          res.json(book)
+        },
+        (err) => next(err)
+      )
       .catch((err) => next(err))
   })
   .post(requireAuth, (req, res, next) => {
@@ -57,23 +72,33 @@ bookRouter.route('/:bookID')
     res.end('POST operation not supported on /books/' + req.params.bookID)
   })
   .put(requireAuth, (req, res, next) => {
-    Book.findByIdAndUpdate(req.params.bookID, {
-      $set: req.body
-    }, { new: true })
-      .then((book) => {
-        res.statusCode = 200
-        res.setHeader('Content-Type', 'application/json')
-        res.json(book)
-      }, (err) => next(err))
+    Books.findByIdAndUpdate(
+      req.params.bookID,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    )
+      .then(
+        (book) => {
+          res.statusCode = 200
+          res.setHeader('Content-Type', 'application/json')
+          res.json(book)
+        },
+        (err) => next(err)
+      )
       .catch((err) => next(err))
   })
   .delete(requireAuth, (req, res, next) => {
-    Book.findByIdAndRemove(req.params.bookID)
-      .then((response) => {
-        res.statusCode = 200
-        res.setHeader('Content-Type', 'application/json')
-        res.json(response)
-      }, (err) => next(err))
+    Books.findByIdAndRemove(req.params.bookID)
+      .then(
+        (response) => {
+          res.statusCode = 200
+          res.setHeader('Content-Type', 'application/json')
+          res.json(response)
+        },
+        (err) => next(err)
+      )
       .catch((err) => next(err))
   })
 

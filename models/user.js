@@ -1,27 +1,31 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
-// const passportLocalMongoose = require('passport-local-mongoose')
-
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: [true, 'Please enter an username'],
-    unique: true
+    unique: true,
   },
   name: {
     type: String,
-    default: ''
+    default: '',
   },
   password: {
     type: String,
     required: [true, 'Please enter a password'],
-    minlength: [8, 'Password is too short (min: 8 characters)']
+    minlength: [8, 'Password is too short (min: 8 characters)'],
   },
   isAdmin: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
+  books: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'book',
+    },
+  ],
 })
 
 userSchema.pre('save', async function (next) {

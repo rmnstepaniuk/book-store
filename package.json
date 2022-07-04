@@ -6,8 +6,14 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
-    "lint": "eslint *.js",
+    "lint": "prettier --check .",
+    "format": "prettier --write .",
     "lint:fix": "eslint --fix *.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": ""
+    }
   },
   "repository": {
     "type": "git",
@@ -39,6 +45,8 @@
     "eslint-plugin-n": "^15.2.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
-    "nodemon": "^2.0.18"
+    "husky": "^8.0.1",
+    "nodemon": "^2.0.18",
+    "prettier": "^2.7.1"
   }
 }
