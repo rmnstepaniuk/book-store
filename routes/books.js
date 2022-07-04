@@ -14,9 +14,9 @@ bookRouter
     Books.find({})
       .then(
         (books) => {
-          // res.statusCode = 200;
-          // res.setHeader("Content-Type", "application/json");
-          // res.json(books);
+          books.forEach((book) => {
+            console.log(book.id);
+          });
           res.render("books", { books });
         },
         (err) => next(err)
@@ -26,18 +26,14 @@ bookRouter
   .post(requireAuth, (req, res, next) => {
     Books.create(req.body)
       .then(
-        (dish) => {
+        (book) => {
           res.statusCode = 200;
           res.setHeader("Content-Type", "application/json");
-          res.json(dish);
+          res.json(book);
         },
         (err) => next(err)
       )
       .catch((err) => next(err));
-  })
-  .put(requireAuth, (_req, res, _next) => {
-    res.statusCode = 403;
-    res.end("PUT operation not supported on /dishes");
   })
   .delete(requireAuth, (_req, res, next) => {
     Books.remove({})
@@ -65,10 +61,6 @@ bookRouter
         (err) => next(err)
       )
       .catch((err) => next(err));
-  })
-  .post(requireAuth, (req, res, _next) => {
-    res.statusCode = 403;
-    res.end("POST operation not supported on /books/" + req.params.bookID);
   })
   .put(requireAuth, (req, res, next) => {
     Books.findByIdAndUpdate(
