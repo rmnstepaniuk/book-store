@@ -43,6 +43,7 @@ const createToken = (id) => {
 const router = Router();
 
 const User = require("../models/user");
+const { requireAuth } = require("../middleware/authenticate");
 
 router.use(bodyParser.json());
 
@@ -120,6 +121,45 @@ router
   .get((_req, res) => {
     res.render("settings");
   })
-  .put((req, res) => {});
+  .post(requireAuth, async (req, res) => {
+    const password = req.body.password;
+    try {
+      const newPassword = await User.hashPassword(password);
+
+      const token = req.cookies.jwt;
+      const decoded = jwt.decode(token);
+
+      const user = await User.findByIdAndUpdate({ _id: decoded.id }, { $set: { password: newPassword } });
+      console.log(user);
+      res.status(200).json({ user: user._id });
+    } catch (err) {
+      const errors = handleErrors(err);
+      res.status(400).json({ errors });
+    }
+    /**
+    const token = req.cookies.jwt;
+    const password = req.body.password;
+    if (token) {
+      jwt.verify(token, secretKey, async (err, decodedToken) => {
+        if (err) {
+          console.log(err.message);
+          res.status(400).send(err.message);
+          next();
+        } else {
+          const data = await User.findOne({ _id: decodedToken.id });
+          if (data) {
+            const newPassword = await User.hashPassword(password);
+            const user = await User.findByIdAndUpdate({ _id: decodedToken.id }, { $set: { password: newPassword } });
+            console.log(user);
+            res.redirect("/");
+          } else {
+            res.redirect("/");
+          }
+        }
+        next();
+      });
+    }
+     **/
+  });
 
 module.exports = router;

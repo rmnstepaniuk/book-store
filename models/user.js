@@ -34,6 +34,19 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+userSchema.pre("findByIdAndUpdate", async function (next) {
+  try {
+    if (this._update.password) {
+      const salt = await bcrypt.genSalt();
+      const hashed = await bcrypt.hash(this._update.password, salt);
+      this._update.password = hashed;
+    }
+    next();
+  } catch (err) {
+    return next(err);
+  }
+});
+
 // static method to login user
 userSchema.statics.login = async function (username, password) {
   const user = await this.findOne({ username });
@@ -45,6 +58,12 @@ userSchema.statics.login = async function (username, password) {
     throw Error("incorrect password");
   }
   throw Error("incorrect username");
+};
+
+userSchema.statics.hashPassword = async function (password) {
+  const salt = await bcrypt.genSalt();
+  password = await bcrypt.hash(password, salt);
+  return password;
 };
 
 // userSchema.plugin(passportLocalMongoose)
