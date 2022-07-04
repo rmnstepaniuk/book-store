@@ -14,9 +14,10 @@ bookRouter
     Books.find({})
       .then(
         (books) => {
-          res.statusCode = 200;
-          res.setHeader("Content-Type", "application/json");
-          res.json(books);
+          // res.statusCode = 200;
+          // res.setHeader("Content-Type", "application/json");
+          // res.json(books);
+          res.render("books", { books });
         },
         (err) => next(err)
       )
