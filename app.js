@@ -13,7 +13,7 @@ const url = config.uri;
 const connect = mongoose.connect(url);
 
 connect.then(
-  (db) => {
+  (_db) => {
     console.log("Connection to database successful");
   },
   (err) => console.log(err)
@@ -32,7 +32,7 @@ app.set("view engine", "ejs");
 
 // routes
 app.get("*", checkUser);
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.render("home");
 });
 app.use("/users", usersRouter);

@@ -49,7 +49,7 @@ router.use(bodyParser.json());
 router
   .route("/")
   /* GET users listing. */
-  .get((req, res, next) => {
+  .get((_req, res, _next) => {
     User.find({}, (err, users) => {
       if (err) {
         res.statusCode = 500;
@@ -61,7 +61,7 @@ router
     });
   })
   /* DELETE all users. */
-  .delete((req, res, next) => {
+  .delete((_req, res, next) => {
     User.remove({})
       .then(
         (response) => {
@@ -76,10 +76,10 @@ router
 
 router
   .route("/signup")
-  .get((req, res) => {
+  .get((_req, res) => {
     res.render("signup");
   })
-  .post(async (req, res, next) => {
+  .post(async (req, res, _next) => {
     const { username, name, password } = req.body;
     try {
       const user = await User.create({ username, name, password });
@@ -94,7 +94,7 @@ router
 
 router
   .route("/login")
-  .get((req, res) => {
+  .get((_req, res) => {
     res.render("login");
   })
   .post(async (req, res) => {
@@ -110,14 +110,14 @@ router
     }
   });
 
-router.get("/logout", (req, res, next) => {
+router.get("/logout", (_req, res, _next) => {
   res.cookie("jwt", "", { maxAge: 1 });
   res.redirect("/");
 });
 
 router
   .route("/settings")
-  .get((req, res) => {
+  .get((_req, res) => {
     res.render("settings");
   })
   .put((req, res) => {});
