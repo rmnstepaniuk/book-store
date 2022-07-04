@@ -129,7 +129,10 @@ router
       const token = req.cookies.jwt;
       const decoded = jwt.decode(token);
 
-      const user = await User.findByIdAndUpdate({ _id: decoded.id }, { $set: { password: newPassword } });
+      const user = await User.findByIdAndUpdate(
+        { _id: decoded.id },
+        { $set: { password: newPassword } }
+      );
       console.log(user);
       res.status(200).json({ user: user._id });
     } catch (err) {
