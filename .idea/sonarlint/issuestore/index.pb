@@ -5,8 +5,6 @@ I
 views/patrials/footer.ejs,f/0/f064213d8509b797ad95d00f4a7b03c0c7d8a955
 ?
 views/login.ejs,3/f/3f748e7b3e38d474ff6964f6a6d3381932b1eac9
-9
-	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 @
 views/signup.ejs,f/b/fbc9cc99a27e840a54a071b85665c235786d8f70
 B
@@ -15,3 +13,17 @@ I
 views/patrials/header.ejs,b/1/b18065fe27759729f6ee932d62ac74cecc31504a
 =
 bin/server.js,2/d/2d2a172f116ee5cb685d89554c8629a517f7d094
+?
+views/books.ejs,2/7/2701eb3bc036a3579ef4cc02b95669675a2c59b5
+D
+middleware/dbFind.js,1/9/19dc9e51c3c6859ee974be9deec7a3bce4450d45
+J
+middleware/authenticate.js,6/0/602f5ff100d6ee1d9d16b8365a78148c448df290
+A
+public/styles.css,f/c/fcdc5740ca959c5b3fe4180645f29cb3fe75fa3b
+?
+routes/users.js,0/1/0183ca13e8b379ffbb27ca8371a09f05510b35e8
+?
+routes/books.js,6/2/62a54391d3d76fae038c5bf898883144166fcff6
+?
+.prettierignore,b/6/b69d8408b6c89ae66e712f0e6af68848291cfdfb

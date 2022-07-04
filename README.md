@@ -41,10 +41,4 @@
 
 ## Схема бази даних
 
-### Table user
-
-![user_diagram.png](res/userdiagram.png)
-
-### Table book
-
-![book_diagram.png](res/bookdiagram.png)
+![](res/dbdiagram.png)

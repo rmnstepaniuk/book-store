@@ -31,6 +31,8 @@ node_modules
 
 ## Plugin-specific files:
 
+.idea/sonarlint
+
 # IntelliJ
 
 bin/config.js
