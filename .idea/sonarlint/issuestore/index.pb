@@ -36,7 +36,5 @@ A
 .prettierignore,b/6/b69d8408b6c89ae66e712f0e6af68848291cfdfb
 A
 package-lock.json,f/a/fa288d1472d29beccb489a676f68739ad365fc47
-<
-package.json,7/0/7030d0b2f71b999ff89a343de08c414af32fc93a
 >
 models/book.js,3/8/38025aa0f5e3c98bb8ed621b70dc7ba1ef0ee593
