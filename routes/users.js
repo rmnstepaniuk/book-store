@@ -43,6 +43,7 @@ const createToken = (id) => {
 const router = Router();
 
 const User = require("../models/user");
+const Book = require("../models/book");
 const { requireAuth, requireAdmin } = require("../middleware/authenticate");
 
 router.use(bodyParser.json());
@@ -52,8 +53,10 @@ router
   /* GET users listing. */
   .get(requireAdmin, (_req, res, next) => {
     User.find({})
+      .populate("books")
       .then(
         (users) => {
+          console.log(users);
           res.render("adminRestricted/users", { users });
         },
         (err) => next(err)
@@ -132,8 +135,9 @@ router
         { _id: decoded.id },
         { $set: { password: newPassword } }
       );
-      console.log(user);
+      console.log("Successfully changed password for user ", user.username);
       res.status(200).json({ user: user._id, token });
+      res.redirect("/");
     } catch (err) {
       const errors = handleErrors(err);
       res.status(400).json({ errors });
@@ -164,7 +168,8 @@ router
      **/
   });
 
-router.route("/:userID")
+router
+  .route("/:userID")
   .post(requireAdmin, (req, res, next) => {
     User.findByIdAndUpdate(
       req.params.userID,
@@ -195,5 +200,28 @@ router.route("/:userID")
       )
       .catch((err) => next(err));
   });
+
+router.route("/add-book/:bookID").post(requireAuth, async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.bookID);
+    console.log(book);
+    if (book.featured) {
+      const token = req.cookies.jwt;
+      const decoded = jwt.decode(token);
+      console.log({ user_id: decoded.id });
+      const user = await User.findById(decoded.id);
+      user.books.push(book);
+      user.save();
+      console.log(user);
+      res.status(200).json({ user });
+    } else {
+      console.log("This book is not featured");
+      res.status(400).json("This book is not featured");
+    }
+  } catch (err) {
+    const errors = handleErrors(err);
+    res.status(400).json({ errors });
+  }
+});
 
 module.exports = router;
