@@ -1,0 +1,14 @@
+<%- include('../partials/header'); -%>
+
+<ul class="books">
+    <% if (users) { %>
+        <% users.forEach(user => { %>
+            <li class="book">
+                <h4><%= user.username %></h4>
+                <button style="margin: 10 auto;" name="user" id="<%= user.id %>">Edit User</button>
+            </li>
+        <% }) %>
+    <% } %>
+</ul>
+
+<%- include('../partials/footer'); -%>

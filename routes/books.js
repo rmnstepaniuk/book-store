@@ -14,9 +14,6 @@ bookRouter
     Books.find({})
       .then(
         (books) => {
-          books.forEach((book) => {
-            console.log(book.id);
-          });
           res.render("books", { books });
         },
         (err) => next(err)
@@ -47,7 +44,7 @@ bookRouter
       )
       .catch((err) => next(err));
   });
-
+/**
 bookRouter
   .route("/:bookID")
   .get(requireAuth, (req, res, next) => {
@@ -92,5 +89,5 @@ bookRouter
       )
       .catch((err) => next(err));
   });
-
+**/
 module.exports = bookRouter;

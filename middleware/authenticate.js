@@ -41,4 +41,36 @@ const checkUser = (req, res, next) => {
   }
 };
 
-module.exports = { requireAuth, checkUser };
+const requireAdmin = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, secretKey, async (err, decodedToken) => {
+      if (err) res.redirect("/");
+      else {
+        const user = await User.findById(decodedToken.id);
+        if (user.isAdmin) {
+          next();
+        } else {
+          res.redirect("/");
+        }
+      }
+    });
+  }
+};
+
+/**
+const requireAdmin = (req, res, next) => {
+  const user = req.user;
+  console.log(user);
+  if (user) {
+    if (user.isAdmin) {
+      next();
+    } else {
+      res.redirect("/");
+    }
+  } else {
+    res.redirect("/");
+  }
+};
+**/
+module.exports = { requireAuth, checkUser, requireAdmin };

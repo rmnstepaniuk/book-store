@@ -43,26 +43,25 @@ const createToken = (id) => {
 const router = Router();
 
 const User = require("../models/user");
-const { requireAuth } = require("../middleware/authenticate");
+const { requireAuth, requireAdmin } = require("../middleware/authenticate");
 
 router.use(bodyParser.json());
 
 router
   .route("/")
   /* GET users listing. */
-  .get((_req, res, _next) => {
-    User.find({}, (err, users) => {
-      if (err) {
-        res.statusCode = 500;
-        res.setHeader("Content-Type", "application/json");
-        res.json({ err });
-      } else {
-        res.json(users);
-      }
-    });
+  .get(requireAdmin, (_req, res, next) => {
+    User.find({})
+      .then(
+        (users) => {
+          res.render("adminRestricted/users", { users });
+        },
+        (err) => next(err)
+      )
+      .catch((err) => next(err));
   })
   /* DELETE all users. */
-  .delete((_req, res, next) => {
+  .delete((_req, res) => {
     User.remove({})
       .then(
         (response) => {
@@ -70,9 +69,9 @@ router
           res.setHeader("Content-Type", "application/json");
           res.json(response);
         },
-        (err) => next(err)
+        (err) => handleErrors(err)
       )
-      .catch((err) => next(err));
+      .catch((err) => handleErrors(err));
   });
 
 router
@@ -80,7 +79,7 @@ router
   .get((_req, res) => {
     res.render("signup");
   })
-  .post(async (req, res, _next) => {
+  .post(async (req, res) => {
     const { username, name, password } = req.body;
     try {
       const user = await User.create({ username, name, password });
@@ -111,7 +110,7 @@ router
     }
   });
 
-router.get("/logout", (_req, res, _next) => {
+router.get("/logout", (_req, res) => {
   res.cookie("jwt", "", { maxAge: 1 });
   res.redirect("/");
 });
@@ -134,7 +133,7 @@ router
         { $set: { password: newPassword } }
       );
       console.log(user);
-      res.status(200).json({ user: user._id });
+      res.status(200).json({ user: user._id, token });
     } catch (err) {
       const errors = handleErrors(err);
       res.status(400).json({ errors });
@@ -163,6 +162,38 @@ router
       });
     }
      **/
+  });
+
+router.route("/:userID")
+  .post(requireAdmin, (req, res, next) => {
+    User.findByIdAndUpdate(
+      req.params.userID,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    )
+      .then(
+        (user) => {
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "application/json");
+          res.json(user);
+        },
+        (err) => next(err)
+      )
+      .catch((err) => next(err));
+  })
+  .delete(requireAdmin, (req, res, next) => {
+    User.findByIdAndRemove(req.params.userID)
+      .then(
+        (response) => {
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "application/json");
+          res.json(response);
+        },
+        (err) => next(err)
+      )
+      .catch((err) => next(err));
   });
 
 module.exports = router;
