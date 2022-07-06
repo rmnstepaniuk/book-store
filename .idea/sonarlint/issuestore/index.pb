@@ -23,8 +23,6 @@ C
 .husky/pre-push,5/9/593d8ffe7c61610f0e23c3534ef747eaf3466f44
 A
 .husky/pre-commit,a/b/ab6c0c74cc7cd7c8c8b24da380d18aa4667658ae
->
-models/user.js,5/8/58952233992370efa7ea98b3ec60c43d2d227d89
 A
 public/styles.css,f/c/fcdc5740ca959c5b3fe4180645f29cb3fe75fa3b
 ?
@@ -33,8 +31,6 @@ A
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 A
 package-lock.json,f/a/fa288d1472d29beccb489a676f68739ad365fc47
->
-models/book.js,3/8/38025aa0f5e3c98bb8ed621b70dc7ba1ef0ee593
 =
 bin/server.js,2/d/2d2a172f116ee5cb685d89554c8629a517f7d094
 @

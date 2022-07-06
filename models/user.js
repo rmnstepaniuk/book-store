@@ -20,12 +20,6 @@ const userSchema = new mongoose.Schema({
 		type: Boolean,
 		default: false,
 	},
-	books: [
-		{
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'book',
-		},
-	],
 });
 
 userSchema.pre('save', async function (next) {

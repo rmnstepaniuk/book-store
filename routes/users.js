@@ -35,9 +35,13 @@ const maxAge = 2 * 60 * 60;
 
 // create JWT
 const createToken = (user) => {
-	return jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.SEC_KEY, {
-		expiresIn: maxAge,
-	});
+	return jwt.sign(
+		{ id: user._id, isAdmin: user.isAdmin },
+		process.env.SEC_KEY,
+		{
+			expiresIn: maxAge,
+		}
+	);
 };
 
 const router = Router();
