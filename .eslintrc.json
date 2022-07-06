@@ -1,0 +1,25 @@
+{
+	"env": {
+		"browser": true,
+		"commonjs": true,
+		"es6": true
+	},
+	"plugins": ["sonarjs"],
+	"extends": ["plugin:sonarjs/recommended"],
+	"globals": {
+		"Atomics": "readonly",
+		"SharedArrayBuffer": "readonly"
+	},
+	"parserOptions": {
+		"ecmaVersion": 2018
+	},
+	"rules": {
+		"linebreak-style": ["error", "unix"],
+		"quotes": ["error", "single"],
+		"semi": ["error", "always"],
+		"no-unused-vars": "off",
+		"sonarjs/no-identical-expressions": "off",
+		"sonarjs/no-identical-functions": "off",
+		"sonarjs/no-duplicate-string": "off"
+	}
+}
