@@ -149,7 +149,8 @@ router
 
 router
 	.route('/:userID')
-	.post(requireAdmin, (req, res, next) => {
+	.all(requireAdmin)
+	.post((req, res, next) => {
 		User.findByIdAndUpdate(
 			req.params.userID,
 			{
@@ -167,7 +168,7 @@ router
 			)
 			.catch((err) => next(err));
 	})
-	.delete(requireAdmin, (req, res, next) => {
+	.delete((req, res, next) => {
 		User.findByIdAndRemove(req.params.userID)
 			.then(
 				(response) => {

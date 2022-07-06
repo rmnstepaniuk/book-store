@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const usersRouter = require('./routes/users');
 const booksRouter = require('./routes/books');
+const bookcasesRouter = require('./routes/bookcases');
 const { checkUser } = require('./middleware/authenticate');
 
 const connect = mongoose.connect(process.env.DB_URI);
@@ -35,5 +36,6 @@ app.get('/', (_req, res) => {
 });
 app.use('/users', usersRouter);
 app.use('/books', booksRouter);
+app.use('/bookcases', bookcasesRouter);
 
 module.exports = app;
