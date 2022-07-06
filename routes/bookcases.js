@@ -64,4 +64,51 @@ bookcaseRouter
 			});
 	});
 
+bookcaseRouter
+	.route('/:bookcaseId')
+	.all(requireAuth)
+	.get((req, res) => {
+		const token = req.cookies.jwt;
+		const decoded = jwt.decode(token);
+		Bookcases.find({ _id: req.params.bookcaseId, user: decoded.id })
+			.then((bookcase) => {
+				if (bookcase) {
+					console.log(bookcase[0]);
+					res.json(bookcase[0]);
+				} else {
+					const errMessage = 'Your do not own such a bookcase';
+					console.log(errMessage);
+					res.json(errMessage);
+				}
+			})
+			.catch((err) => {
+				res.status(400).json(err);
+			});
+	})
+	.delete((req, res) => {
+		const token = req.cookies.jwt;
+		const decoded = jwt.decode(token);
+		Bookcases.find({ _id: req.params.bookcaseId, user: decoded.id }).then(
+			(bookcase) => {
+				if (bookcase) {
+					Bookcases.deleteOne(bookcase[0])
+						.then((response) => {
+							console.log(
+								'Successfully deleted bookcase#',
+								req.params.bookcaseId
+							);
+							res.statusCode(200);
+							res.setHeader('Content-Type', 'application/json');
+							res.json(response);
+						})
+						.catch((err) => {
+							res.status(400).json(err);
+						});
+				} else {
+					res.json('You do not have such bookcase');
+				}
+			}
+		);
+	});
+
 module.exports = bookcaseRouter;
