@@ -41,4 +41,4 @@
 
 ## Схема бази даних
 
-![](res/dbdiagram.png)
+![](res/dbdiagram.png.png)
