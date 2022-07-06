@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-const { secretKey } = require('../bin/config');
+require('dotenv').config();
 
 // handle errors
 const handleErrors = (err) => {
@@ -35,7 +35,7 @@ const maxAge = 2 * 60 * 60;
 
 // create JWT
 const createToken = (id) => {
-	return jwt.sign({ id }, secretKey, {
+	return jwt.sign({ id }, process.env.SEC_KEY, {
 		expiresIn: maxAge,
 	});
 };
@@ -145,7 +145,7 @@ router
     const token = req.cookies.jwt;
     const password = req.body.password;
     if (token) {
-      jwt.verify(token, secretKey, async (err, decodedToken) => {
+      jwt.verify(token, process.env.SEC_KEY, async (err, decodedToken) => {
         if (err) {
           console.log(err.message);
           res.status(400).send(err.message);

@@ -2,15 +2,13 @@ const express = require('express');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-
-const config = require('./bin/config');
+require('dotenv').config();
 
 const usersRouter = require('./routes/users');
 const booksRouter = require('./routes/books');
 const { checkUser } = require('./middleware/authenticate');
 
-const url = config.uri;
-const connect = mongoose.connect(url);
+const connect = mongoose.connect(process.env.DB_URI);
 
 connect.then(
 	(_db) => {
