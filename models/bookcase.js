@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 const bookcaseSchema = new Schema({
 	title: {
 		type: String,
-		default: 'Bookcase'
+		default: 'Bookcase',
 	},
 	description: {
 		type: String,
-		default: ''
+		default: '',
 	},
 	user: {
 		type: mongoose.Schema.Types.ObjectId,

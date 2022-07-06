@@ -9,7 +9,7 @@
 		"lint": "eslint . --ext .js && prettier --check .",
 		"lint:fix": "eslint --fix . --ext .js",
 		"prettier": "prettier --check .",
-		"prettier:format": "prettier --write ."
+		"prettier:format": "prettier --write . && git add ."
 	},
 	"husky": {
 		"hooks": {
