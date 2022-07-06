@@ -34,8 +34,8 @@ const handleErrors = (err) => {
 const maxAge = 2 * 60 * 60;
 
 // create JWT
-const createToken = (id) => {
-	return jwt.sign({ id }, process.env.SEC_KEY, {
+const createToken = (user) => {
+	return jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.SEC_KEY, {
 		expiresIn: maxAge,
 	});
 };
@@ -85,7 +85,7 @@ router
 		const { username, name, password } = req.body;
 		try {
 			const user = await User.create({ username, name, password });
-			const token = createToken(user._id);
+			const token = createToken(user);
 			res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
 			res.status(201).json({ user: user._id });
 		} catch (err) {
@@ -103,7 +103,7 @@ router
 		const { username, password } = req.body;
 		try {
 			const user = await User.login(username, password);
-			const token = createToken(user._id);
+			const token = createToken(user);
 			res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
 			res.status(200).json({ user: user._id });
 		} catch (err) {
@@ -141,30 +141,6 @@ router
 			const errors = handleErrors(err);
 			res.status(400).json({ errors });
 		}
-		/**
-    const token = req.cookies.jwt;
-    const password = req.body.password;
-    if (token) {
-      jwt.verify(token, process.env.SEC_KEY, async (err, decodedToken) => {
-        if (err) {
-          console.log(err.message);
-          res.status(400).send(err.message);
-          next();
-        } else {
-          const data = await User.findOne({ _id: decodedToken.id });
-          if (data) {
-            const newPassword = await User.hashPassword(password);
-            const user = await User.findByIdAndUpdate({ _id: decodedToken.id }, { $set: { password: newPassword } });
-            console.log(user);
-            res.redirect("/");
-          } else {
-            res.redirect("/");
-          }
-        }
-        next();
-      });
-    }
-     **/
 	});
 
 router

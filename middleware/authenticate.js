@@ -24,14 +24,13 @@ const requireAuth = (req, res, next) => {
 const checkUser = (req, res, next) => {
 	const token = req.cookies.jwt;
 	if (token) {
-		jwt.verify(token, secretKey, async (err, decodedToken) => {
+		jwt.verify(token, process.env.SEC_KEY, async (err, decodedToken) => {
 			if (err) {
 				console.log(err.message);
 				res.locals.user = null;
 				next();
 			} else {
-				const user = await User.findById(decodedToken.id);
-				res.locals.user = user;
+				res.locals.user = await User.findById(decodedToken.id);
 				next();
 			}
 		});
@@ -44,33 +43,14 @@ const checkUser = (req, res, next) => {
 const requireAdmin = (req, res, next) => {
 	const token = req.cookies.jwt;
 	if (token) {
-		jwt.verify(token, secretKey, async (err, decodedToken) => {
+		jwt.verify(token, process.env.SEC_KEY, async (err, decodedToken) => {
 			if (err) res.redirect('/');
 			else {
-				const user = await User.findById(decodedToken.id);
-				if (user.isAdmin) {
-					next();
-				} else {
-					res.redirect('/');
-				}
+				if (decodedToken.isAdmin) next();
+				else res.redirect('/');
 			}
 		});
 	}
 };
 
-/**
-const requireAdmin = (req, res, next) => {
-  const user = req.user;
-  console.log(user);
-  if (user) {
-    if (user.isAdmin) {
-      next();
-    } else {
-      res.redirect("/");
-    }
-  } else {
-    res.redirect("/");
-  }
-};
-**/
 module.exports = { requireAuth, checkUser, requireAdmin };
