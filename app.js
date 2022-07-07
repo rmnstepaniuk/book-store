@@ -9,7 +9,9 @@ const booksRouter = require('./routes/books');
 const bookcasesRouter = require('./routes/bookcases');
 const { checkUser } = require('./middleware/authenticate');
 
-const connect = mongoose.connect(process.env.DB_URI);
+const connect = mongoose.connect(
+	process.env.MONGODB_URI || 'mongodb://localhost:27017/bookstore'
+);
 
 connect.then(
 	(_db) => {

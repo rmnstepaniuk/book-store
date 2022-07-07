@@ -21,8 +21,6 @@ A
 .husky/pre-commit,a/b/ab6c0c74cc7cd7c8c8b24da380d18aa4667658ae
 A
 package-lock.json,f/a/fa288d1472d29beccb489a676f68739ad365fc47
-=
-bin/server.js,2/d/2d2a172f116ee5cb685d89554c8629a517f7d094
 @
 .prettierrc.json,1/e/1ee5d199ddbeaaa1717e65b449ac7a6f03bed689
 >
@@ -32,8 +30,6 @@ A
 :
 
 .gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
-4
-.env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
 9
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 >

@@ -17,6 +17,9 @@
 			"pre-push": "npm run lint"
 		}
 	},
+	"engines": {
+		"node": "14.15.0"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/rmnstepaniuk/book-store.git"
