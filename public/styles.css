@@ -124,15 +124,17 @@ header .btn {
 	display: inline-block;
 	font-size: 0.8em;
 }
-.books {
+.books,
+.bookcases {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	column-gap: 30px;
 	row-gap: 80px;
-	margin: 80px AUTO;
+	margin: 40px AUTO;
 	max-width: 1200px;
 }
-.book {
+.book,
+.bookcase {
 	display: inline-block;
 	border-radius: 20px;
 	background: white;

@@ -82,7 +82,7 @@ router
 router
 	.route('/signup')
 	.get((_req, res) => {
-		res.render('signup');
+		res.render('authentication/signup');
 	})
 	.post(async (req, res) => {
 		const { username, name, password } = req.body;
@@ -100,7 +100,7 @@ router
 router
 	.route('/login')
 	.get((_req, res) => {
-		res.render('login');
+		res.render('authentication/login');
 	})
 	.post(async (req, res) => {
 		const { username, password } = req.body;
@@ -123,7 +123,7 @@ router.get('/logout', (_req, res) => {
 router
 	.route('/settings')
 	.get((_req, res) => {
-		res.render('settings');
+		res.render('authentication/settings');
 	})
 	.post(requireAuth, async (req, res) => {
 		const password = req.body.password;

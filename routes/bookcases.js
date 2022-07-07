@@ -24,14 +24,9 @@ bookcaseRouter
 				const userBookcases = bookcases.filter(
 					(bookcase) => bookcase.user.id.toString() === decoded.id.toString()
 				);
+
 				console.log(userBookcases);
-				if (userBookcases) {
-					res.json(userBookcases);
-				} else {
-					console.log('You have no bookcase');
-					res.statusCode = 400;
-					res.json('You have no bookcase');
-				}
+				res.render('books/bookcases', { bookcases: userBookcases });
 			})
 			.catch((err) => next(err));
 	})
@@ -72,7 +67,7 @@ bookcaseRouter
 			.populate('books')
 			.then((bookcase) => {
 				if (bookcase) {
-					console.log(bookcase[0]);
+					console.log(bookcase[0].books);
 					res.json(bookcase[0]);
 				} else {
 					const errMessage = 'Your do not own such bookcase';
@@ -111,11 +106,13 @@ bookcaseRouter
 	.post(async (req, res, next) => {
 		const bookcaseID = req.params.bookcaseId;
 		const bookID = req.params.bookId;
-		console.log('Bookcase: ', bookcaseID, '\nBook: ', bookID);
+
 		try {
 			const book = await Books.findById(bookID);
 			if (book.featured) {
 				Bookcases.findById(bookcaseID)
+					.populate('user')
+					.populate('books')
 					.then((bookcase) => {
 						bookcase.books.push(book);
 						bookcase.save();

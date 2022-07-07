@@ -14,7 +14,7 @@ bookRouter
 		Books.find({})
 			.then((books) => {
 				console.log(books);
-				res.render('books', { books });
+				res.render('books/books', { books });
 			})
 			.catch((err) => next(err));
 	})
@@ -54,7 +54,7 @@ bookRouter.route('/add/:bookID').post(requireAuth, async (req, res) => {
 
 			console.log(user);
 
-			res.render('books');
+			res.render('books/books');
 		} else {
 			console.log('This book is not featured');
 			res.status(400).json('This book is not featured');

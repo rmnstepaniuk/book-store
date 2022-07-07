@@ -11,8 +11,6 @@ I
 views/signup.ejs,f/b/fbc9cc99a27e840a54a071b85665c235786d8f70
 B
 views/settings.ejs,4/8/482a1c534bc37cc7aafd3bafd46fbbdedb8e1496
-O
-views/adminRestricted/users.ejs,4/2/42a63774aeb571f1a23d76972c82e8793f891ed3
 A
 .husky/_/husky.sh,3/a/3adfd36c15599869a23f3974adee1a9f52f13895
 C
@@ -21,8 +19,6 @@ C
 .husky/pre-push,5/9/593d8ffe7c61610f0e23c3534ef747eaf3466f44
 A
 .husky/pre-commit,a/b/ab6c0c74cc7cd7c8c8b24da380d18aa4667658ae
-A
-public/styles.css,f/c/fcdc5740ca959c5b3fe4180645f29cb3fe75fa3b
 A
 package-lock.json,f/a/fa288d1472d29beccb489a676f68739ad365fc47
 =
