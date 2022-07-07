@@ -3,9 +3,6 @@ const bodyParser = require('body-parser');
 
 const Books = require('../models/book');
 const { requireAuth, requireAdmin } = require('../middleware/authenticate');
-const Book = require('../models/book');
-const jwt = require('jsonwebtoken');
-const User = require('../models/user');
 
 const bookRouter = express.Router();
 
@@ -15,39 +12,31 @@ bookRouter
 	.route('/')
 	.get((_req, res, next) => {
 		Books.find({})
-			.then(
-				(books) => {
-					res.render('books', { books });
-				},
-				(err) => next(err)
-			)
+			.then((books) => {
+				console.log(books);
+				res.render('books', { books });
+			})
 			.catch((err) => next(err));
 	})
 	.post(requireAuth, (req, res, next) => {
 		Books.create(req.body)
-			.then(
-				(book) => {
-					res.statusCode = 200;
-					res.setHeader('Content-Type', 'application/json');
-					res.json(book);
-				},
-				(err) => next(err)
-			)
+			.then((book) => {
+				res.statusCode = 200;
+				res.setHeader('Content-Type', 'application/json');
+				res.json(book);
+			})
 			.catch((err) => next(err));
 	})
 	.delete(requireAuth, (_req, res, next) => {
 		Books.remove({})
-			.then(
-				(response) => {
-					res.statusCode = 200;
-					res.setHeader('Content-Type', 'application/json');
-					res.json(response);
-				},
-				(err) => next(err)
-			)
+			.then((response) => {
+				res.statusCode = 200;
+				res.setHeader('Content-Type', 'application/json');
+				res.json(response);
+			})
 			.catch((err) => next(err));
 	});
-
+/**
 bookRouter.route('/add/:bookID').post(requireAuth, async (req, res) => {
 	try {
 		const book = await Book.findById(req.params.bookID);
@@ -74,6 +63,7 @@ bookRouter.route('/add/:bookID').post(requireAuth, async (req, res) => {
 		res.status(400).json(err.message);
 	}
 });
+**/
 
 bookRouter
 	.route('/:bookID')
@@ -99,26 +89,20 @@ bookRouter
 			},
 			{ new: true }
 		)
-			.then(
-				(book) => {
-					res.statusCode = 200;
-					res.setHeader('Content-Type', 'application/json');
-					res.json(book);
-				},
-				(err) => next(err)
-			)
+			.then((book) => {
+				res.statusCode = 200;
+				res.setHeader('Content-Type', 'application/json');
+				res.json(book);
+			})
 			.catch((err) => next(err));
 	})
 	.delete(requireAdmin, (req, res, next) => {
 		Books.findByIdAndRemove(req.params.bookID)
-			.then(
-				(response) => {
-					res.statusCode = 200;
-					res.setHeader('Content-Type', 'application/json');
-					res.json(response);
-				},
-				(err) => next(err)
-			)
+			.then((response) => {
+				res.statusCode = 200;
+				res.setHeader('Content-Type', 'application/json');
+				res.json(response);
+			})
 			.catch((err) => next(err));
 	});
 

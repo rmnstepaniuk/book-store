@@ -54,17 +54,16 @@ router.use(bodyParser.json());
 router
 	.route('/')
 	/* GET users listing. */
-	.get(requireAdmin, (_req, res, next) => {
+	.get(requireAdmin, (_req, res) => {
 		User.find({})
-			.populate('books.title')
 			.then(
 				(users) => {
 					console.log(users);
 					res.render('adminRestricted/users', { users });
 				},
-				(err) => next(err)
+				(err) => handleErrors(err)
 			)
-			.catch((err) => next(err));
+			.catch((err) => handleErrors(err));
 	})
 	/* DELETE all users. */
 	.delete((_req, res) => {
