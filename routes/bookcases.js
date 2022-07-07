@@ -6,6 +6,7 @@ const bookcaseRouter = Router();
 
 const Bookcases = require('../models/bookcase');
 const { requireAuth, requireAdmin } = require('../middleware/authenticate');
+const Book = require('../models/book');
 
 bookcaseRouter.use(bodyParser.json());
 
@@ -71,12 +72,14 @@ bookcaseRouter
 		const token = req.cookies.jwt;
 		const decoded = jwt.decode(token);
 		Bookcases.find({ _id: req.params.bookcaseId, user: decoded.id })
+			.populate('user')
+			.populate('books')
 			.then((bookcase) => {
 				if (bookcase) {
 					console.log(bookcase[0]);
 					res.json(bookcase[0]);
 				} else {
-					const errMessage = 'Your do not own such a bookcase';
+					const errMessage = 'Your do not own such bookcase';
 					console.log(errMessage);
 					res.json(errMessage);
 				}
@@ -109,6 +112,34 @@ bookcaseRouter
 				}
 			}
 		);
+	});
+
+bookcaseRouter
+	.route('/:bookcaseId/:bookId')
+	.all(requireAuth)
+	.post(async (req, res) => {
+		console.log(
+			`Bookcase: ${req.params.bookcaseId}\nBook: ${req.params.bookId}`
+		);
+		try {
+			const book = await Book.findById(req.params.bookId);
+			console.log(book.title);
+			if (book.featured) {
+				const bookcase = await Bookcases.findById({
+					_id: req.params.bookcaseId,
+				});
+
+				bookcase.books.push(book);
+				bookcase.save();
+				console.log(bookcase);
+				res.json(bookcase);
+			}
+		} catch (err) {
+			res.json(err);
+		}
+		// }).
+		// delete((req, res) => {
+		//
 	});
 
 module.exports = bookcaseRouter;

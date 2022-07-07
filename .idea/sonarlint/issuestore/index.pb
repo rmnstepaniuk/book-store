@@ -33,3 +33,22 @@ A
 .prettierrc.json,1/e/1ee5d199ddbeaaa1717e65b449ac7a6f03bed689
 >
 .eslintrc.json,7/1/71c20a341bfe32aa5cd5b4384e94f942bab6a7d3
+?
+.prettierignore,b/6/b69d8408b6c89ae66e712f0e6af68848291cfdfb
+:
+
+.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
+4
+.env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
+9
+	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+>
+models/user.js,5/8/58952233992370efa7ea98b3ec60c43d2d227d89
+J
+middleware/authenticate.js,6/0/602f5ff100d6ee1d9d16b8365a78148c448df290
+?
+routes/users.js,0/1/0183ca13e8b379ffbb27ca8371a09f05510b35e8
+>
+models/book.js,3/8/38025aa0f5e3c98bb8ed621b70dc7ba1ef0ee593
+B
+models/bookcase.js,0/c/0cde9c9c42e7ddbb31d125a46dc23e3c92527f5e
