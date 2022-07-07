@@ -77,6 +77,23 @@ bookcaseRouter
 			})
 			.catch((err) => next(err));
 	})
+	.put((req, res, next) => {
+		const bookcaseID = req.params.bookcaseId;
+		const decoded = jwt.decode(req.cookies.jwt);
+		Bookcases.findOneAndUpdate(
+			{ _id: bookcaseID, user: decoded.id },
+			{ $set: req.body },
+			{ new: true }
+		)
+			.populate('user')
+			.populate('books')
+			.then((bookcase) => {
+				console.log('Successfully updated bookcase#', bookcaseID);
+				console.log(bookcase);
+				res.json(bookcase);
+			})
+			.catch((err) => next(err));
+	})
 	.delete((req, res, next) => {
 		const token = req.cookies.jwt;
 		const decoded = jwt.decode(token);
@@ -132,7 +149,12 @@ bookcaseRouter
 		try {
 			Bookcases.findById(bookcaseID)
 				.then((bookcase) => {
-					bookcase.books = bookcase.books.filter((book) => book._id !== bookID);
+					console.log(
+						bookcase.books.filter((book) => book._id.toString() !== bookID)
+					);
+					bookcase.books = bookcase.books.filter(
+						(book) => book._id.toString() !== bookID
+					);
 					bookcase.save();
 
 					console.log(
@@ -141,6 +163,7 @@ bookcaseRouter
 						' from bookcase#',
 						bookcaseID
 					);
+					console.log(bookcase);
 				})
 				.catch((err) => next(err));
 		} catch (err) {
